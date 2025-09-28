@@ -5,4 +5,19 @@ date: "2025-09-28"
 output: github_document
 ---
 
-testing 
+## libraries loaded 
+These are all the libraries for this homework assigment 
+```{r}
+library(tidyverse)
+```
+
+## Probelm 1 
+Problem 1 uses the FiveThirtyEight data which we will need to upload the pols-month.csv, unempoloyment.csv, and snp.csv. Goal is to merge into a single dataframe using year and month as keys. 
+###Cleaning pols-month.csv
+#### Load the data
+```{r}
+pols_month <- 
+  read_csv("./fivethirtyeight_datasets/pols-month.csv") 
+```
+
+
