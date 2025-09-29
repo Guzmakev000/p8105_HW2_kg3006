@@ -298,7 +298,7 @@ There are no missing data.
 ##### State FIPS 
 Looking at the data: Will change state to New York if 36
 ```{r}
-table(zillow_zip$state_fips) # not a useful data and os will remove 
+table(zillow_zip$state_fips) # not a useful data and so will remove 
 any(is.na(zillow_zip$state_fips)) # No missing values
 
 zillow_zip <- zillow_zip %>% 
@@ -313,9 +313,9 @@ There are no missing values and all are New York
 ##### County_code 
 Looking at county code 
 ```{r}
-table(zillow_zip$county_code) # not a useful data and os will remove
+table(zillow_zip$county_code) # not a useful data and so will remove
 any(is.na(zillow_zip$county_code)) # No missing values
-table(zillow_zip$county_code, zillow_zip$county) # all unique)
+table(zillow_zip$county_code, zillow_zip$county) #  all county codes match with one county. 
 ```
 All counties match up wtih the county code, this is a redundent variables so I will remove it. 
 ```{r}
@@ -326,13 +326,65 @@ zillow_zip <- zillow_zip %>%
 ##### County_fips
 Looking at county fips
 ```{r}
-table(zillow_zip$county_fips) # not a useful data and os will remove
-any(is.na(zillow_zip$county_fips)) # No missing values
-table(zillow_zip$county_fips, zillow_zip$county) # all unique
+table(zillow_zip$county_fips) # not a useful data and so will remove
+table(zillow_zip$county_fips, zillow_zip$county) # all county fips match with one county. 
 ```
 All counties match up wtih the county fips, this is a redundent variables so I will remove it. 
 ```{r}
 zillow_zip <- zillow_zip %>%
   select(-county_fips)
+```
+
+##### Zip_code
+Looking at zip code
+```{r}
+table(zillow_zip$zip_code) # zip codes make sense 
+any(is.na(zillow_zip$zip_code)) # No missing values
+```
+There are many zip codes. They all make sense. 
+
+##### File_date 
+Looking at file date. All the file date is 07/25/07, this is also not useful, so will remove it. 
+```{r}
+table(zillow_zip$file_date) # all 7/25/07, will remove 
+zillow_zip <- zillow_zip %>%
+  select(-file_date)
+```
+
+
+##### neighbrohood 
+Looking at neighborhood
+```{r}
+any(is.na(zillow_zip$neighborhood)) # There are missing values 
+```
+Some missing variables
+mapping out which neighborhoods are in each county 
+```{r}
+table(zillow_zip$neighborhood, zillow_zip$county) # there are some neighborhoods with two different countires.
+#Finding neighborhoods with more than one county
+zillow_zip %>%
+  group_by(neighborhood) %>%
+  summarise(n_counties = n_distinct(county)) %>%
+  filter(n_counties > 1)
+# there are 5 missing, will leave as is.
+#Kingsbridge and riverdale is in the bronx 
+#Nortwhest Brooklyn is in kings 
+#Rockaways should also be in queens not 
+```
+##### looking at zipcodes fore each neighborhood with multiple counties
+```{r}
+zillow_zip %>%
+  filter(neighborhood %in% c("Kingsbridge and Riverdale", "Northwest Brooklyn", "Rockaways")) %>%
+  select(neighborhood, county, zip_code)
+#If 11201 then should be Kings for county 
+#If 10463 then should be Bronx for county
+#If 11693 then should be Queens for county
+zillow_zip <- zillow_zip %>%
+  mutate(county = case_when(
+    neighborhood == "Kingsbridge and Riverdale" & zip_code == 10463 ~ "Bronx",
+    neighborhood == "Northwest Brooklyn" & zip_code == 11201 ~ "Kings",
+    neighborhood == "Rockaways" & zip_code == 11693 ~ "Queens",
+    TRUE ~ county
+  ))
 ```
 
