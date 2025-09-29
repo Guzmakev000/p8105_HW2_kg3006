@@ -196,6 +196,10 @@ In this problem we use the excel file 2024_09_Trash_Wheel_Data.xlsx which as 3 s
 
 ### Loading Mr. Trashweel data 
 Specification include cleaning column names, removing columns that are missing, removing rows without dumpsters, adding dataset for merging, reorganizing, and making sport balls into integers. 
+
+In addition there seems to be a problem in the datasets formating.   
+- year - all should be character  
+- 
 ```{r}
 mr_trash_wheel <- 
   read_excel("./Trash/2024_09_Trash_Wheel_Data.xlsx",
@@ -217,7 +221,8 @@ professor_trash_wheel <-
   janitor::clean_names() %>% 
   mutate (dataset="professor_trash_wheel") %>%
   select(year, month, dataset, everything()) %>%
-  filter(!is.na(dumpster)) 
+  filter(!is.na(dumpster)) %>% 
+  mutate(year = as.character(year))
 
 
 ```
@@ -230,17 +235,20 @@ gwynnda_trash_wheel <-
   janitor::clean_names() %>% 
   mutate (dataset="gwynnda_trash_wheel") %>%
   select(year, month, dataset, everything()) %>%
-  filter(!is.na(dumpster))
+  filter(!is.na(dumpster)) %>% 
+  mutate(year = as.character(year))
 ```
 
 All data has month, year dumpster. We will go through each one and then merge by month and year. 
 
-### Cleaning Mr. Trash Wheel data
-#### looking at data
+### Join rows for all datasets
+Joining all datasets by rows 
 ```{r}
-head(mr_trash_wheel)
+trash_wheel_data <-
+  bind_rows(mr_trash_wheel,
+            professor_trash_wheel,
+            gwynnda_trash_wheel)
 ```
-
 
 
 
