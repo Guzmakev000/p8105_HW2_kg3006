@@ -277,7 +277,7 @@ zillow_zip <-
 This dataset contains 7 variables and 322 observations.
 
 ```{r}
-Zori <-
+zori <-
   read_csv("./Zillow/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv") %>% 
   janitor::clean_names()
 ```
@@ -302,10 +302,11 @@ table(zillow_zip$state_fips) # not a useful data and so will remove
 any(is.na(zillow_zip$state_fips)) # No missing values
 
 zillow_zip <- zillow_zip %>% 
-  mutate(state_fips = case_when(
+  mutate(state = case_when(
      state_fips == 36 ~ "New York",
      TRUE ~ as.character(state_fips)
-  ))
+  )) %>% 
+    select(-state_fips)
 ```
 
 There are no missing values and all are New York 
@@ -341,7 +342,7 @@ Looking at zip code
 table(zillow_zip$zip_code) # zip codes make sense 
 any(is.na(zillow_zip$zip_code)) # No missing values
 ```
-There are many zip codes. They all make sense. 
+There are many zip codes. They all make sense from 10001-11697
 
 ##### File_date 
 Looking at file date. All the file date is 07/25/07, this is also not useful, so will remove it. 
@@ -385,6 +386,25 @@ zillow_zip <- zillow_zip %>%
     neighborhood == "Northwest Brooklyn" & zip_code == 11201 ~ "Kings",
     neighborhood == "Rockaways" & zip_code == 11693 ~ "Queens",
     TRUE ~ county
-  ))
+  )) %>% 
+  select(zip_code, state, county, everything())
 ```
+
+####Cleaning zori 
+##### zip_code (region_name) 
+Looking at region_name and region_type 
+```{r}
+#Region type
+table(zori$region_type) # all zip codes, will remove eventually 
+any(is.na(zori$region_name)) # No missing values
+
+#Region name - already as numeric, however will need to rename for consistency 
+table(zori$region_name) # All zipcode are within a range that makes sense (10001-11697)
+
+zori <- zori %>%
+  rename(zip_code = region_name) %>%
+  select(-region_type)
+```
+All zipcode are within a range that makes sense (10001-11697). Needed to rename to zip_code from region_name. 
+
 
