@@ -202,7 +202,8 @@ mr_trash_wheel <-
   select(-...15, -...16) %>% 
   janitor::clean_names() %>% 
   mutate (dataset="mr_trash_wheel") %>% 
-  select(year, month, dataset, everything())
+  select(year, month, dataset, everything()) %>% 
+  filter(!is.na(dumpster))
 ```
 ### Loading Professor Trash Wheel data
 ```{r}
