@@ -191,3 +191,4 @@ The **dimentions of the dataset** are `r nrow(merged_data)` observations and `r 
 The dataset **starts on `r first(merged_data$year)` and ends in `r last(merged_data$year)`**.
 
 ## Problem 2 
+
