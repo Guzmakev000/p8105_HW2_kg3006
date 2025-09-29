@@ -428,3 +428,14 @@ any(is.na(zori$size_rank)) # No missing values
 ```
 
 ##### Dealing with dates 
+This data is the ZORI data which is a measure of typical observed rental market engagement. It is arrange into columns by date. We should piviot it so that it instead we will have two rows, one for the date and the other for the ZORI. Date should also be changed to mm/dd/yyyy format.
+```{r}
+zori <- zori %>%
+  pivot_longer(cols = starts_with("x"),
+               names_to = "date",
+               values_to = "zori") %>%
+  mutate(date = str_remove(date, "x")) %>%
+  mutate(date = as.Date(date, format="%Y_%m_%d"))
+```
+
+
