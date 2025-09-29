@@ -295,5 +295,31 @@ any(is.na(zillow_zip$county)) # No missing values
 ```
 There are no missing data. 
 
-##### State FIPS
-Looking at the data:
+##### State FIPS 
+Looking at the data: Will change state to New York if 36
+```{r}
+table(zillow_zip$state_fips) # not a useful data and os will remove 
+any(is.na(zillow_zip$state_fips)) # No missing values
+
+zillow_zip <- zillow_zip %>% 
+  mutate(state_fips = case_when(
+     state_fips == 36 ~ "New York",
+     TRUE ~ as.character(state_fips)
+  ))
+```
+
+There are no missing values and all are New York 
+
+##### County_code 
+Looking at county code 
+```{r}
+table(zillow_zip$county_code) # not a useful data and os will remove
+any(is.na(zillow_zip$county_code)) # No missing values
+table(zillow_zip$county_code, zillow_zip$county) # all unique)
+```
+All counties match up wtih the county code, this is a redundent variables so I will remove it. 
+```{r}
+zillow_zip <- zillow_zip %>%
+  select(-county_code)
+```
+
