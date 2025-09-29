@@ -272,9 +272,26 @@ We will be using zillow data here
 zillow_zip <-
   read_csv("./Zillow/Zip Codes.csv")
 ```
+This dataset contains 7 variables and 322 observations. 
 
 ```{r}
 Zori <-
   read_csv("./Zillow/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv")
 ```
+149 observations with 125 variables. Most variables are dates with long foramt. 
+
+### Stating to Clean 
+We are specifically analyzing NYC between Janurary 2015 and August 2024. 
+
+#### Cleaning zillow_zip
+##### County 
+First we look at data 
+```{r}
+table(zillow_zip$County) # 149 New York, 48 Kings, 30 Bronx, Queens 81, Richmond 14 
+any(is.na(zillow_zip$County)) # No missing values
+```
+There are no missing data. 
+
+##### State FIPS
+
 
