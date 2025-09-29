@@ -266,6 +266,7 @@ The **total weight of trash collected by professor trash wheel** was `r trash_wh
 
 ## Problem 3 Zillow 
 We will be using zillow data here 
+
 ### Loading the data
 ```{r}
 zillow_zip <-
