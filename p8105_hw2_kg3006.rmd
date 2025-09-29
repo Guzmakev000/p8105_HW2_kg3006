@@ -5,7 +5,7 @@ date: "2025-09-28"
 output: github_document
 ---
 
-## libraries loaded 
+## Load Libraries
 These are all the libraries for this homework assigment 
 ```{r}
 library(tidyverse)
@@ -138,4 +138,56 @@ unemployment <-
   rename(year = Year)
 ```
 
+### Changing month 
+Month data representes the percent of unepolyment in each month. This will need to be pivoted from wide to long format  for month
+```{r}
+unemployment <-
+  unemployment %>%
+  pivot_longer(cols = Jan:Dec,
+               names_to = "month",
+               values_to = "unemployment_rate")
+```
+I will also need to chagne month from shorten 3 word name to full name 
+```{r}
+unemployment <-
+  unemployment %>%
+  mutate(month = case_when(
+    month == "Jan" ~ "January",
+    month == "Feb" ~ "February",
+    month == "Mar" ~ "March",
+    month == "Apr" ~ "April",
+    month == "May" ~ "May",
+    month == "Jun" ~ "June",
+    month == "Jul" ~ "July",
+    month == "Aug" ~ "August",
+    month == "Sep" ~ "September",
+    month == "Oct" ~ "October",
+    month == "Nov" ~ "November",
+    month == "Dec" ~ "December"
+  ))
+```
 
+### Merging all three dataframes
+Now that all three dataframes are cleaned, we can merge them using year and month as keys with left_join
+```{r}
+merged_data <-
+  pols_month %>%
+  left_join(snp, by = c("year", "month")) %>%
+  left_join(unemployment, by = c("year", "month"))
+```
+
+### Description of datasets 
+This combined dataset contines information gathered from the FiveThirtyEight data. Each dataset is arranged into year of month of the data. The pols_month dataset was informative in the party affiliation of the president in power during each year-month time interval. It also contains infomration on the number of senators, representitives, and governers during this time period. The snp dataset contains each year-month closing value of the S&P 500 index, and finally the unempolymenbt dataset contains the unemployment rate for each year-month time interval.
+
+The **dimentions of the dataset** are `r nrow(merged_data)` observations and `r ncol(merged_data)` variables/columns.
+
+**Key variables include**:  
+- year  
+- month  
+- president  
+- close (S&P 500 closing value)  
+- unemployment_rate  
+
+The dataset **starts on `r first(merged_data$year)` and ends in `r last(merged_data$year)`**.
+
+## Problem 2 
