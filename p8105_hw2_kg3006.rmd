@@ -195,6 +195,7 @@ The dataset **starts on `r first(merged_data$year)` and ends in `r last(merged_d
 In this problem we use the excel file 2024_09_Trash_Wheel_Data.xlsx which as 3 sheets of importance "Mr. Trash Wheel", "Professor Trash Wheel", and "Gwynnda Trash Wheel". We will clean each sheet seperately and then merge. 
 
 ### Loading Mr. Trashweel data 
+Specification include cleaning column names, removing columns that are missing, removing rows without dumpsters, adding dataset for merging, reorganizing, and making sport balls into integers. 
 ```{r}
 mr_trash_wheel <- 
   read_excel("./Trash/2024_09_Trash_Wheel_Data.xlsx",
@@ -203,8 +204,10 @@ mr_trash_wheel <-
   janitor::clean_names() %>% 
   mutate (dataset="mr_trash_wheel") %>% 
   select(year, month, dataset, everything()) %>% 
-  filter(!is.na(dumpster))
+  filter(!is.na(dumpster)) %>% 
+  mutate(sports_balls = as.integer(round(sports_balls)))
 ```
+
 ### Loading Professor Trash Wheel data
 ```{r}
 professor_trash_wheel <-
