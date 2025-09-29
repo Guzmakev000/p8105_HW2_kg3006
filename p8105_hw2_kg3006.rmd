@@ -72,6 +72,38 @@ pols_month <-
 snp <- 
   read_csv("./fivethirtyeight_datasets/snp.csv")
 ```
+There are two variables here. The first is the date which needs to be cleaned and go to the front, and the second is the close, which is the closing value fo the S&P 500 index. 
+
+#### Separating Date into year, month, date
+Current structure is "M/D/YY", we will seperate into year, month, day and remove day. Also making year come first then month
+```{r}
+snp <- 
+  snp %>%
+  separate(col = date,
+           into = c("month", "day", "year"),
+           sep = "/") %>%
+  select(-day) %>% 
+  select(year, month, everything()) 
+```
+##### Chaning month from numeric to month name
+```{r}
+snp <- 
+  snp %>%
+  mutate(month = case_when(
+    month == "1" ~ "January",
+    month == "2" ~ "February",
+    month == "3" ~ "March",
+    month == "4" ~ "April",
+    month == "5" ~ "May",
+    month == "6" ~ "June",
+    month == "7" ~ "July",
+    month == "8" ~ "August",
+    month == "9" ~ "September",
+    month == "10" ~ "October",
+    month == "11" ~ "November",
+    month == "12" ~ "December"
+  ))
+```
 
 
 
