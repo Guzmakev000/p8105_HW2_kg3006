@@ -66,4 +66,12 @@ pols_month <-
   select(-prez_gop, -prez_dem)
 ```
 
+### Cleaning snp.csv 
+#### Load the data
+```{r}
+snp <- 
+  read_csv("./fivethirtyeight_datasets/snp.csv")
+```
+
+
 
