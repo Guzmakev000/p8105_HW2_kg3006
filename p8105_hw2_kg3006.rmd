@@ -407,4 +407,16 @@ zori <- zori %>%
 ```
 All zipcode are within a range that makes sense (10001-11697). Needed to rename to zip_code from region_name. 
 
+##### State_name and state 
+First looking at state_name and state. Not needed since merge will be based on zip_code
+```{r}
+table(zori$state_name) # all NY as character 
+#Missing values
+any(is.na(zori$state_name)) # No missing values
+table(zori$state) # all NY
+#Removing state_name and state 
+zori <- zori %>%
+  select(-state_name, -state)
+```
+
 
