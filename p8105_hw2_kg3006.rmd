@@ -6,10 +6,14 @@ output: github_document
 ---
 
 ## Load Libraries
+
 These are all the libraries for this homework assigment 
 ```{r}
 library(tidyverse)
 library(readxl)
+library(tigris)
+library(sf)
+library(ggplot2)
 ```
 
 ## Probelm 1 
@@ -459,6 +463,34 @@ This dataset has **`r nrow(zillow_data)` observations** and `r ncol(zillow_data)
 There are **`r unique(zillow_data$zip_code) %>% length()` unique zip codes** in the dataset. And there are **`r unique(zillow_data$neighborhood) %>% length()` unique neighborhoods** in the dataset.
 
 ### Zipcodes compariosn between datasets
-
+There are **`r (unique(zillow_zip$zip_code) %>% length()) - (unique(zori$zip_code) %>% length())` zip codes** that are in the zillow_zip dataset but not in the zori dataset. These are: 
+```{r, echo=FALSE}
+setdiff(zillow_zip$zip_code, zori$zip_code)
+```
+The map of these zip codes show that these are primarily in the outskirts of NYC. 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#missing dataframe
+missing_zips <- setdiff(zillow_zip$zip_code, zori$zip_code)
+missing_df <- zillow_zip %>% filter(zip_code %in% missing_zips)
+#map
+ny_zips <- zctas(state = "NY", year = 2010, cb = FALSE)
+#change ZCTA5CE10 to zip_code and numeric
+ny_zips <- ny_zips %>%
+  mutate(zip_code = as.numeric(ZCTA5CE10)) %>%
+  select(-ZCTA5CE10)
+#keep only zip codes that are preseent in missing_df
+missing_zips_sf <- ny_zips %>%
+  inner_join(missing_df, by = "zip_code")
+#zip codes present
+present_zips_sf <- ny_zips %>%
+  inner_join(zori, by = "zip_code")
+#plotting
+ggplot() +
+  # Base layer: all present ZIPs
+  geom_sf(data = present_zips_sf, fill = "grey80", color = "white") +
+  # Highlight missing ZIPs
+  geom_sf(data = missing_zips_sf, fill = "red", color = "black") +
+  labs(title = "ZIP Codes in Zillow but Missing in ZORI (NY only)")
+```
 
 
