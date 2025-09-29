@@ -323,3 +323,16 @@ zillow_zip <- zillow_zip %>%
   select(-county_code)
 ```
 
+##### County_fips
+Looking at county fips
+```{r}
+table(zillow_zip$county_fips) # not a useful data and os will remove
+any(is.na(zillow_zip$county_fips)) # No missing values
+table(zillow_zip$county_fips, zillow_zip$county) # all unique
+```
+All counties match up wtih the county fips, this is a redundent variables so I will remove it. 
+```{r}
+zillow_zip <- zillow_zip %>%
+  select(-county_fips)
+```
+
