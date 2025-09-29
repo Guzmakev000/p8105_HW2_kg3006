@@ -268,17 +268,20 @@ The **total weight of trash collected by professor trash wheel** was `r trash_wh
 We will be using zillow data here 
 
 ### Loading the data
+Uploading the data and cleaning the names with janitor 
 ```{r}
 zillow_zip <-
-  read_csv("./Zillow/Zip Codes.csv")
+  read_csv("./Zillow/Zip Codes.csv") %>% 
+  janitor::clean_names()
 ```
-This dataset contains 7 variables and 322 observations. 
+This dataset contains 7 variables and 322 observations.
 
 ```{r}
 Zori <-
-  read_csv("./Zillow/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv")
+  read_csv("./Zillow/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv") %>% 
+  janitor::clean_names()
 ```
-149 observations with 125 variables. Most variables are dates with long foramt. 
+149 observations with 125 variables. Most variables are dates with long format
 
 ### Stating to Clean 
 We are specifically analyzing NYC between Janurary 2015 and August 2024. 
@@ -287,11 +290,10 @@ We are specifically analyzing NYC between Janurary 2015 and August 2024.
 ##### County 
 First we look at data 
 ```{r}
-table(zillow_zip$County) # 149 New York, 48 Kings, 30 Bronx, Queens 81, Richmond 14 
-any(is.na(zillow_zip$County)) # No missing values
+table(zillow_zip$county) # 149 New York, 48 Kings, 30 Bronx, Queens 81, Richmond 14 
+any(is.na(zillow_zip$county)) # No missing values
 ```
 There are no missing data. 
 
 ##### State FIPS
-
-
+Looking at the data:
