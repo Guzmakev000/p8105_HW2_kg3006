@@ -493,4 +493,28 @@ ggplot() +
   labs(title = "ZIP Codes in Zillow but Missing in ZORI (NY only)")
 ```
 
+### Analyzing rental prices 
 
+```{r, echo=FALSE}
+#filtering for January 2020 and January 2021
+zillow_data %>%
+  filter(month(date) == 1 & year(date) %in% c(2020, 2021)) %>%
+  group_by(zip_code, year = year(date), month = month(date)) %>%
+  summarise(zori = mean(zori, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = year,
+    values_from = zori,
+    names_prefix = "zori_"
+  ) %>% 
+  mutate(price_drop = zori_2020 - zori_2021) %>% 
+  left_join(zillow_zip %>% select(zip_code, county, neighborhood), by = "zip_code") %>%
+  arrange(desc(price_drop)) %>%
+  select(zip_code, price_drop, county, neighborhood) %>%
+  mutate(neighborhood = case_when(
+    zip_code ==  10069 ~ "Upper West Side",
+    TRUE ~ neighborhood
+  )) %>%
+  slice_head(n = 10)
+```
+
+The largest drops in prices all came from NY county, where neighborhoods such as Lower Manhattan, the Upper West Side, the Lower East side had the largest price drops. 
