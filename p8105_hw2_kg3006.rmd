@@ -9,6 +9,7 @@ output: github_document
 These are all the libraries for this homework assigment 
 ```{r}
 library(tidyverse)
+library(readxl)
 ```
 
 ## Probelm 1 
@@ -191,4 +192,26 @@ The **dimentions of the dataset** are `r nrow(merged_data)` observations and `r 
 The dataset **starts on `r first(merged_data$year)` and ends in `r last(merged_data$year)`**.
 
 ## Problem 2 
+In this problem we use the excel file 2024_09_Trash_Wheel_Data.xlsx which as 3 sheets of importance "Mr. Trash Wheel", "Professor Trash Wheel", and "Gwynnda Trash Wheel". We will clean each sheet seperately and then merge. 
+
+### Loading Mr. Trash Wheel data
+```{r}
+mr_trash_wheel <- 
+  read_excel("./Trash/2024_09_Trash_Wheel_Data.xlsx",
+                     sheet = "Mr. Trash Wheel")
+```
+### Loading Professor Trash Wheel data
+```{r}
+professor_trash_wheel <-
+  read_excel("./Trash/2024_09_Trash_Wheel_Data.xlsx",
+                     sheet = "Professor Trash Wheel")
+```
+### Loading Gwynnda Trash Wheel data
+```{r}
+gwynnda_trash_wheel <-
+  read_excel("./Trash/2024_09_Trash_Wheel_Data.xlsx",
+                     sheet = "Gwynnda Trash Wheel")
+```
+
+### Cleaning Mr. Trash Wheel data
 
